@@ -1,4 +1,5 @@
 {% extends 'blogs/base.html' %}
+{% load blog_tags %}
 {% block title %}My Blog{% endblock %}
 {% block content %}
     {% for post in posts %}
@@ -10,13 +11,8 @@
         <p class="date">
             Published {{ post.publish }} by {{ post.author|title }}
         </p>
-        {{ post.body|truncatewords:30|linebreaks }}
+        <p class="tags">Tags: {{ post.tags.all|join:', ' }}</p>
+        {{ post.body|markdown|truncatewords_html:30 }}
     {% endfor %}
-    {% comment %}
-    in the view we have posts=paginator.page()
-    hence our paginator object is posts and we have to
-    pass that paginator object to the pagination.html
-    that expects it to be called page.
-    {% endcomment %}
     {% include 'post/pagination.html' with page=page_obj %}
 {% endblock %}
